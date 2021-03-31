@@ -7,7 +7,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 @SuppressWarnings("unused")
-public class NBT
+public class NBT implements Serializable
 {
     /** A set containing all NBT Tags */
     private Set<NBTTag<?>> nbtTags = new HashSet<>();
