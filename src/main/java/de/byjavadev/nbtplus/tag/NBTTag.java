@@ -2,9 +2,11 @@ package de.byjavadev.nbtplus.tag;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.ToString;
 
 import java.io.Serializable;
 
+@ToString
 @AllArgsConstructor
 @Data
 public class NBTTag<T> implements Serializable
