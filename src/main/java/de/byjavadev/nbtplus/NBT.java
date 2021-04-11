@@ -88,16 +88,9 @@ public class NBT implements Serializable
 
     public void saveAll(final OutputStream outputStream) throws IOException
     {
-        final ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
-
-        byteArrayOutputStream.write(START_MAGIC);
-        byteArrayOutputStream.write(save());
-        byteArrayOutputStream.write(END_MAGIC);
-
-        byte[] data;
-        System.out.println(Arrays.toString(data = byteArrayOutputStream.toByteArray()));
-        System.out.println("Length: " + data.length);
-        outputStream.write(data);
+        outputStream.write(START_MAGIC);
+        outputStream.write(save());
+        outputStream.write(END_MAGIC);
     }
 
     /**
@@ -113,8 +106,6 @@ public class NBT implements Serializable
     {
         final ByteArrayInputStream byteArrayInputStream = new ByteArrayInputStream(bytes);
         final ObjectInputStream objectInputStream = new ObjectInputStream(byteArrayInputStream);
-
-        System.out.println(Arrays.toString(bytes));
 
         final NBT nbt = new NBT();
         nbt.nbtTags = (Set<NBTTag<?>>) objectInputStream.readObject();
@@ -136,8 +127,6 @@ public class NBT implements Serializable
         int current;
         while ((current = inputStream.read()) != -1)
         {
-            //System.out.println("Handling " + current + " (byte " + ((byte) current) + ")..");
-
             if(current == START_MAGIC)
             {
                 if(!first)
@@ -145,7 +134,6 @@ public class NBT implements Serializable
                     throw new StreamCorruptedException("Start number inside the data");
                 } else
                 {
-                    System.out.println("Found section where nbt starts!");
                     first = false;
                 }
                 continue;
@@ -153,19 +141,15 @@ public class NBT implements Serializable
 
             if(current == END_MAGIC)
             {
-                final byte[] data = read.toByteArray();
-                System.out.println("Found end (" + data.length + "), creating nbt!");
-                return from(data);
+                return from(read.toByteArray());
             }
 
             if(!first)
             {
-                //System.out.println("Wrote data: " + current);
                 read.write(current);
             }
         }
 
-        System.out.println("Could not find start byte, no nbt has been read...");
         return null;
     }
 }
