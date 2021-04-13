@@ -14,7 +14,7 @@ import java.util.Set;
 public class NBT implements Serializable
 {
     /** The magic numbers for the start and the end of the NBT data section */
-    private static int START_MAGIC = /* dec 170 */ 0xAA, END_MAGIC = /* dec 188 */ 0xBC;
+    public static int START_MAGIC = /* dec 170 */ 0xAA, END_MAGIC = /* dec 188 */ 0xBC;
 
     /** A set containing all NBT Tags */
     private Set<NBTTag<?>> nbtTags = new HashSet<>();
@@ -151,17 +151,5 @@ public class NBT implements Serializable
         }
 
         return null;
-    }
-
-    /**
-     * Changes the magic bytes
-     * @param start the start bytes
-     * @param end the end bytes
-     */
-
-    public static void changeMagic(final int start, final int end)
-    {
-        START_MAGIC = start;
-        END_MAGIC = end;
     }
 }
