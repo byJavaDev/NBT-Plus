@@ -5,7 +5,6 @@ import lombok.EqualsAndHashCode;
 import lombok.ToString;
 
 import java.io.*;
-import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -14,7 +13,7 @@ import java.util.Set;
 public class NBT implements Serializable
 {
     /** The magic numbers for the start and the end of the NBT data section */
-    private static int START_MAGIC = /* dec 170 */ 0xAA, END_MAGIC = /* dec 188 */ 0xBC;
+    public static int START_MAGIC = /* dec 170 */ 0xAA, CONFIRM_START_MAGIC = /* dec 171 */ 0xAB, END_MAGIC = /* dec 188 */ 0xBC, CONFIRM_END_MAGIC = /* dec 189 */ 0xBD;
 
     /** A set containing all NBT Tags */
     private Set<NBTTag<?>> nbtTags = new HashSet<>();
@@ -89,8 +88,10 @@ public class NBT implements Serializable
     public void saveAll(final OutputStream outputStream) throws IOException
     {
         outputStream.write(START_MAGIC);
+        outputStream.write(CONFIRM_START_MAGIC);
         outputStream.write(save());
         outputStream.write(END_MAGIC);
+        outputStream.write(CONFIRM_END_MAGIC);
     }
 
     /**
@@ -123,11 +124,25 @@ public class NBT implements Serializable
     {
         final ByteArrayOutputStream read = new ByteArrayOutputStream();
 
+        boolean startMagic = false, endMagic = false;
         boolean first = true;
+
         int current;
         while ((current = inputStream.read()) != -1)
         {
-            if(current == START_MAGIC)
+            if(current == START_MAGIC && !startMagic)
+            {
+                startMagic = true;
+                continue;
+            }
+
+            if(current == END_MAGIC && !endMagic)
+            {
+                endMagic = true;
+                continue;
+            }
+
+            if(current == CONFIRM_START_MAGIC && startMagic)
             {
                 if(!first)
                 {
@@ -136,10 +151,12 @@ public class NBT implements Serializable
                 {
                     first = false;
                 }
+
+                startMagic = false;
                 continue;
             }
 
-            if(current == END_MAGIC)
+            if(current == CONFIRM_END_MAGIC && endMagic)
             {
                 return from(read.toByteArray());
             }
@@ -151,17 +168,5 @@ public class NBT implements Serializable
         }
 
         return null;
-    }
-
-    /**
-     * Changes the magic bytes
-     * @param start the start bytes
-     * @param end the end bytes
-     */
-
-    public static void changeMagic(final int start, final int end)
-    {
-        START_MAGIC = start;
-        END_MAGIC = end;
     }
 }
