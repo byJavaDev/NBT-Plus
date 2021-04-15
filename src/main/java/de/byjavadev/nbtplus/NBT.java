@@ -1,8 +1,11 @@
 package de.byjavadev.nbtplus;
 
 import de.byjavadev.nbtplus.tag.NBTTag;
+
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
+import lombok.Getter;
+import lombok.Setter;
 
 import java.io.*;
 import java.util.HashSet;
