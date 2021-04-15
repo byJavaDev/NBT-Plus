@@ -16,6 +16,7 @@ public class NBT implements Serializable
     public static int START_MAGIC = /* dec 170 */ 0xAA, CONFIRM_START_MAGIC = /* dec 171 */ 0xAB, END_MAGIC = /* dec 188 */ 0xBC, CONFIRM_END_MAGIC = /* dec 189 */ 0xBD;
 
     /** A set containing all NBT Tags */
+	@Getter @Setter //Only for debugging
     private Set<NBTTag<?>> nbtTags = new HashSet<>();
 
     /**
