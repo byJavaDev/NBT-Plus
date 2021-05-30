@@ -11,6 +11,8 @@ import java.io.Serializable;
 @Data
 public class NBTTag<T> implements Serializable
 {
+    private static final long serialVersionUID = 5098346L;
+
     private final String key;
     private T value;
 
