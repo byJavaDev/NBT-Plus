@@ -14,6 +14,7 @@ public class NBT implements Serializable
 {
     /** The magic numbers for the start and the end of the NBT data section */
     public static int START_MAGIC = /* dec 170 */ 0xAA, CONFIRM_START_MAGIC = /* dec 171 */ 0xAB, END_MAGIC = /* dec 188 */ 0xBC, CONFIRM_END_MAGIC = /* dec 189 */ 0xBD;
+    private static final long serialVersionUID = 23598235L;
 
     /** A set containing all NBT Tags */
     private Set<NBTTag<?>> nbtTags = new HashSet<>();
